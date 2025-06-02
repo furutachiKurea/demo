@@ -2,6 +2,18 @@
 
 作为 rainbond 集成 kubeblocks 的部分技术验证
 
+# 开发环境
+
+- Ubuntu 24.04 LTS
+- kind version 0.24.0
+- Docker version 28.2.1
+- Kubernetes: v1.31.0
+- KubeBlocks: 1.0.0
+- kbcli: 1.0.0
+- kubectl: v1.33.1
+
+(It works on my machine XD)
+
 # Kubeblocks 安装
 
 ## kind
