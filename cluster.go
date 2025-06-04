@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	clusterDef      = "postgresql"
+	clusterDef         = "postgresql"
 	postgresqlCompName = "postgresql"
 )
 
@@ -254,12 +254,11 @@ func scaleCluster(name string, replicas int) error {
 	// 创建 OpsRequest 进行扩缩容
 	opsRequest := &opsv1alpha1.OpsRequest{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: "operations.kubeblocks.io/v1",
+			APIVersion: "operations.kubeblocks.io/v1alpha1",
 			Kind:       "OpsRequest",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-scale-", name),
-			Namespace:    defaultNamespace,
+			Namespace: defaultNamespace,
 		},
 		Spec: opsv1alpha1.OpsRequestSpec{
 			ClusterName: name,
@@ -271,6 +270,7 @@ func scaleCluster(name string, replicas int) error {
 
 	if replicaChanges > 0 {
 		// 扩容操作
+		opsRequest.GenerateName = fmt.Sprintf("%s-scale-out-", name)
 		opsRequest.Spec.HorizontalScalingList = []opsv1alpha1.HorizontalScaling{
 			{
 				ComponentOps: opsv1alpha1.ComponentOps{
@@ -285,7 +285,8 @@ func scaleCluster(name string, replicas int) error {
 		}
 	} else {
 		// 缩容操作
-		replicaChanges = -replicaChanges 
+		replicaChanges = -replicaChanges
+		opsRequest.GenerateName = fmt.Sprintf("%s-scale-out-", name)
 		opsRequest.Spec.HorizontalScalingList = []opsv1alpha1.HorizontalScaling{
 			{
 				ComponentOps: opsv1alpha1.ComponentOps{
@@ -305,9 +306,9 @@ func scaleCluster(name string, replicas int) error {
 		return fmt.Errorf("创建扩缩容请求失败: %w", err)
 	}
 
-	fmt.Printf("已提交扩缩容请求，将 %s 集群的 %s 组件副本数从 %d 调整为 %d\n", 
+	fmt.Printf("已提交扩缩容请求，将 %s 集群的 %s 组件副本数从 %d 调整为 %d\n",
 		name, postgresqlCompName, currentReplicas, replicas)
-	
+
 	// 等待操作完成
 	fmt.Println("正在等待操作完成...")
 
