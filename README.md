@@ -51,19 +51,19 @@ kbcli kubeblocks status # 验证 Kubeblocks 安装状态
 make
 ```
 
-create 命令将会创建一个单副本的 PostgreSQL 集群
+create 命令将在 demo namespace 创建一个单副本的 PostgreSQL 集群
 
 ```shell
 kbop create --name test-cluster
 ```
 
-scale 命令用来修改指定集群的副本数
+scale 命令用来修改 demo namespace 中指定集群的副本数
 
 ```shell
 kbop scale --name test-cluster --replicas 2
 ```
 
-delete 命令用来删除指定的集群
+delete 命令用来删除 demo namespace 中指定的集群
 
 ```shell
 kbop delete --name test-cluster
